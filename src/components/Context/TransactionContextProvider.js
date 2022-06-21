@@ -6,19 +6,20 @@ function loadingStatusReducer(state, action) {
   console.log("loadingStatusReducer---");
   switch (action.type) {
     case "pending": {
-      console.log("status: pending");
+      console.log("loadingStatusReducer---status: pending"); //TODO: status enum
       return { status: "pending", data: null, error: null };
     }
     case "resolved": {
-      console.log("status: resolved");
+      console.log("loadingStatusReducer---status: resolved");
+      debugger;
       return { status: "resolved", data: action.data, error: null };
     }
     case "rejected": {
-      console.log("status: rejected");
+      console.log("loadingStatusReducer---status: rejected");
       return { status: "rejected", data: null, error: action.error };
     }
     default: {
-      console.log("status: default/shouldnt happen");
+      console.log("loadingStatusReducer---status: default/shouldnt happen");
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }

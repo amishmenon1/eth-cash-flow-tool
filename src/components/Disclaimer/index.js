@@ -1,12 +1,10 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const Disclaimer = ({ message }) => {
   return (
-    <Container className="disclaimer">
-      {/* <Col md={12}> */}
+    <Col md={12}>
       <Row className="centeralign">
         {/* <Panel.Heading> */}
         {/* <Panel.Title componentClass="h3">Disclaimer</Panel.Title> */}
@@ -18,8 +16,7 @@ const Disclaimer = ({ message }) => {
         </Row>
         {/* </Panel.Body> */}
       </Row>
-      {/* </Col> */}
-    </Container>
+    </Col>
   );
 };
 
