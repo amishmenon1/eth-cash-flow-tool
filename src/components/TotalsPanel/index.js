@@ -4,9 +4,9 @@ import { TransactionContext } from "../Context/TransactionContextProvider";
 //TODO: rename to DisplayPanel
 const TotalsPanel = ({ web3State }) => {
   const [transactionState, dispatch] = useContext(TransactionContext);
-  const [totalEthTransferred, setTotalEthTransferred] = useState(0);
-  const [totalNumTransactions, setTotalNumTransactions] = useState(0);
-  const [totalNumContractAddresses, setTotalNumContractAddresses] = useState(0);
+  // const [totalEthTransferred, setTotalEthTransferred] = useState(0);
+  // const [totalNumTransactions, setTotalNumTransactions] = useState(0);
+  // const [totalNumContractAddresses, setTotalNumContractAddresses] = useState(0);
 
   const displayData = [
     {
@@ -23,22 +23,25 @@ const TotalsPanel = ({ web3State }) => {
     },
   ];
 
-  function calculateTotalEthTransferred() {
-    const { transactions } = transactionState;
-    const totalEthMoved =
-      transactions.length > 0 ? transactions.reduce((a, b) => a.add(b)) : "0";
+  // function calculateTotalEthTransferred() {
+  //   const { transactions } = transactionState;
+  //   const totalEthMoved =
+  //     transactions.length > 0 ? transactions.reduce((a, b) => a.add(b)) : "0";
 
-    return totalEthMoved;
-  }
+  //   return totalEthMoved;
+  // }
 
-  function calculateTotalNumTransactions() {}
+  // function calculateTotalNumTransactions() {}
 
-  function calculateTotalNumContractAddresses() {}
+  // function calculateTotalNumContractAddresses() {}
 
   //TODO: create functions to calculate these fields?
   useEffect(() => {
-    console.log("transaction state: ", transactionState);
-    console.log("web3 state: ", web3State);
+    console.log(
+      "TotalsPanel useEffect render -- transaction state: ",
+      transactionState
+    );
+    console.log("TotalsPanel useEffect render -- web3 state: ", web3State);
   }, []);
 
   return (

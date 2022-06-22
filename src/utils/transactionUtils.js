@@ -1,20 +1,20 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber } from "ethers";
 
-const mapToSenderAddress = (tx) => tx.from;
-const mapToSenderTransaction = (t) => {
-  return {
-    from: t.from,
-    value: BigNumber.from(t.value),
-  };
-};
-const mapToRecipientAddress = (tx) => tx.to;
-const mapToRecipientTransaction = (t) => {
-  return {
-    to: t.to,
-    value: BigNumber.from(t.value),
-  };
-};
-const isContractCode = (c) => c === "0x";
+// const mapToSenderAddress = (tx) => tx.from;
+// const mapToSenderTransaction = (t) => {
+//   return {
+//     from: t.from,
+//     value: BigNumber.from(t.value),
+//   };
+// };
+// const mapToRecipientAddress = (tx) => tx.to;
+// const mapToRecipientTransaction = (t) => {
+//   return {
+//     to: t.to,
+//     value: BigNumber.from(t.value),
+//   };
+// };
+// const isContractCode = (c) => c === "0x";
 
 /**
  *
@@ -22,7 +22,7 @@ const isContractCode = (c) => c === "0x";
  * @param {string} groupByKey the groupBy key
  * @returns a list of transaction totals, grouped by the groupByKey
  */
-const groupTransactions = (txArray, groupByKey) => {
+function groupTransactions(txArray, groupByKey, x) {
   const totals = [];
   txArray.reduce((results, tx) => {
     if (!results[groupByKey]) {
@@ -30,7 +30,7 @@ const groupTransactions = (txArray, groupByKey) => {
         value: BigNumber.from("0"),
       };
       // set the correct groupBy key
-      results[tx[groupByKey]][groupByKey] = tx[groupByKey];
+      results[tx[groupByKey]]["address"] = tx[groupByKey];
       //set a hash to act as a key
       results[tx[groupByKey]]["hash"] = tx["hash"];
       totals.push(results[tx[groupByKey]]);
@@ -39,6 +39,6 @@ const groupTransactions = (txArray, groupByKey) => {
     return results;
   }, {});
   return totals;
-};
+}
 
 export { groupTransactions };

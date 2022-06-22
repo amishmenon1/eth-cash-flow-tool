@@ -10,6 +10,11 @@ export const TransactionContext = React.createContext();
 function transactionReducer(state, action) {
   console.log("loadingStatusReducer---");
   switch (action.type) {
+    case Status.IDLE: {
+      console.log("loadingStatusReducer---status: idle");
+
+      return { status: Status.IDLE, data: null, error: null };
+    }
     case Status.PENDING: {
       console.log("loadingStatusReducer---status: pending");
       toast.warn("Loading all data. This could take a few minutes.", {
@@ -47,7 +52,7 @@ function transactionReducer(state, action) {
 export function TransactionContextProvider(props) {
   const [transactionState, dispatch] = useReducer(transactionReducer, {
     data: [],
-    status: "idle",
+    status: Status.IDLE,
   });
 
   return (

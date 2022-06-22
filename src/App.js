@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import logo from "./images/magnifying-glass-icon.png";
 import "./App.css";
 import Col from "react-bootstrap/Col";

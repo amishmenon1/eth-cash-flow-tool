@@ -17,7 +17,8 @@ async function walletIsConnected() {
       connected = false;
     } else {
       const accounts = await ethereum.request({ method: "eth_accounts" });
-      return { connected: Boolean(accounts.length > 0), accounts: accounts };
+      connected = Boolean(accounts.length > 0);
+      return { connected, accounts };
     }
   } catch (error) {
     console.error(error);
