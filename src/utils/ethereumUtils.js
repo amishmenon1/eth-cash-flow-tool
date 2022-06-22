@@ -17,7 +17,8 @@ async function walletIsConnected() {
       connected = false;
     } else {
       const accounts = await ethereum.request({ method: "eth_accounts" });
-      return { connected: Boolean(accounts.length > 0), accounts: accounts };
+      connected = Boolean(accounts.length > 0);
+      return { connected, accounts };
     }
   } catch (error) {
     console.error(error);
@@ -47,7 +48,14 @@ async function connectWallet() {
  * for each address, check the code to see if its a contract
  * @returns code Promise
  */
-async function getAddressCodes(addresses, web3State) {}
+async function getAddressCodes(addresses, web3State) {
+  const codePromises = [];
+  addresses.forEach((address) => {
+    // codePromises.push(web3.eth.getCode(address)); //TODO: convert to ethers
+  });
+
+  return Promise.all(codePromises);
+}
 
 /**
  *
@@ -117,7 +125,6 @@ export {
   getSigner,
   connectWallet,
   getBlocks,
-  getTxHashesFromBlocks,
   getAddressCodes,
   walletIsConnected,
   getTransactionsFromBlocks,

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import logo from "./images/magnifying-glass-icon.png";
 import "./App.css";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import { ethers } from "ethers";
-import abi from "./abis/WavePortal.json";
 import { TransactionContextProvider } from "./components/";
 import { BlockInput, Disclaimer, ConnectWalletButton } from "./components";
-import { connectWallet, walletIsConnected } from "./utils/ethereumUtils";
+import {
+  connectWallet,
+  getEthereumProvider,
+  walletIsConnected,
+} from "./utils/ethereumUtils";
 
 const App = () => {
   const [web3State, setWeb3State] = useState({
@@ -17,8 +19,6 @@ const App = () => {
     account: null,
     provider: null,
     connected: false,
-    contractAddress: "0x665935479A9A6ac151320DC637a27014Df5B44BD",
-    contractAbi: abi.abi,
   });
 
   const [blockInputs, setBlockInputs] = useState({
@@ -29,7 +29,7 @@ const App = () => {
   useEffect(() => {
     console.log("App --- useEffect()");
     const { ethereum } = window;
-    const provider = new ethers.providers.Web3Provider(ethereum);
+    const provider = getEthereumProvider(ethereum);
     async function loadWeb3State() {
       return walletIsConnected();
     }
@@ -66,7 +66,9 @@ const App = () => {
   const styles = {
     blockInput: {
       borderStyle: "outset",
-      //TODO: add padding bottom
+    },
+    connected: {
+      fontStyle: "italic",
     },
   };
 
@@ -78,19 +80,26 @@ const App = () => {
         <h1 className="App-title">Block Explorer</h1>
       </header>
       <ToastContainer />
-
+      <Row>
+        <Col md={10} />
+        <Col md={2}>
+          {!web3State.connected ? (
+            <ConnectWalletButton connectWalletCb={handleConnectWallet} />
+          ) : (
+            <div style={styles.connected}>
+              {" "}
+              Wallet Connected: {web3State.account.slice(0, 3)}...
+              {web3State.account.slice(-3)}
+            </div>
+          )}{" "}
+        </Col>
+      </Row>
       <Row>
         <Col md={2} />
         <Col md={8} style={styles.blockInput}>
           <BlockInput onSubmit={onBlockInputSubmit} />
         </Col>
-        <Col md={2}>
-          {!web3State.connected ? (
-            <ConnectWalletButton connectWalletCb={handleConnectWallet} />
-          ) : (
-            <div> Connected</div>
-          )}{" "}
-        </Col>
+        <Col md={2} />
       </Row>
       <br />
 

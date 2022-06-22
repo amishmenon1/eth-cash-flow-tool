@@ -1,0 +1,151 @@
+eth cash flow tool architecture
+	
+TODO:
+	
+	ConnectedWallet
+		- show connected network
+	TableDisplay
+		- set fixed height with scroll
+		- 
+	TotalsPanel
+		- calculate totals
+		- display totals
+
+	TableFilterComponent
+		- auto-select default
+
+
+	- style 
+		- table filter
+		- totals panel
+		- disclaimer
+
+
+	---- update headers
+	---- update table values
+	---- add table filter
+	---- status enum
+	---- add toast messages to status reducer
+
+
+2292134850000000000
+2292134850000000000
+
+
+start: 15009099
+end:   15009101
+
+
+TableFilter components
+
+	<TxContext>
+
+		<Totals>
+		<TxTable>
+			- selectedFilter?
+			- filters?
+
+			<TableFilter selectedFilter={} >
+				- filters
+				- selectedFilter.key
+
+			<TableDisplay>
+
+
+
+
+
+
+
+
+
+
+
+react@^17.0.2
+"react-router-dom": "^4.3.1",
+"react-bootstrap": "^0.32.1",
+
+	App
+      	- web3State
+  		- block1,block2
+  		- ConnectWalletButton
+	    - handleFetchDataSubmit (block1, block2)
+	    	---> onSubmit -> set block1 and block 2
+
+	      BlockInput(blockInputs, onSubmit)
+	      	validate block1 not empty
+	      	onSubmit --> parent.onSubmit(block1, block2)
+
+	      TransactionResultsContext(blockInputs)
+	        - transactionState {transactions, status}
+	        - statusReducer
+
+	    
+
+	          Totals (status, transactions)
+	          
+	          TransactionTable (status, transactions)
+	          		
+	          		* when block1/block2 change
+			        	generate block range
+			        	call getTransactions()
+
+			        		status = pending
+			        		getBlockRange()
+			        		getBlockPromises()
+			        			getBlocks()
+			        		getTransactions()
+
+			        		status = resolved/rejected
+
+
+
+
+
+
+
+Web3Util.js
+
+	web3
+	account
+	getBlockData
+	getAddressCodes
+
+
+App.js
+	
+	startBlock
+	endBlock
+	<Web3Context> ?? ------- useWeb3() custom hook
+
+		<BlockInputSection />
+		<ResultsSection />
+		<TransactionTable />
+	<Web3Context />
+
+
+
+BlockInputSection.js
+	startBlock -- lift state
+	endBlock
+
+
+TransactionTable.js (props -> startBlock, endBlock)
+
+	transactionList
+	tableFilters
+	transactionCount
+
+	Table.js
+
+		rows
+
+
+ResultsSection.js
+	
+	total ETH transferred
+	totalNumContractAddresses
+
+
+
+
