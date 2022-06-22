@@ -1,22 +1,41 @@
 import React, { useReducer } from "react";
 import { TransactionsTable } from "../";
 import { TotalsPanel } from "../";
+import { toast } from "react-toastify";
 
-function loadingStatusReducer(state, action) {
+import Status from "../../enum/Status";
+
+export const TransactionContext = React.createContext();
+
+function transactionReducer(state, action) {
   console.log("loadingStatusReducer---");
   switch (action.type) {
-    case "pending": {
-      console.log("loadingStatusReducer---status: pending"); //TODO: status enum
-      return { status: "pending", data: null, error: null };
+    case Status.PENDING: {
+      console.log("loadingStatusReducer---status: pending");
+      toast.warn("Loading all data. This could take a few minutes.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 10000,
+      });
+      return { status: Status.PENDING, data: null, error: null };
     }
-    case "resolved": {
+    case Status.RESOLVED: {
       console.log("loadingStatusReducer---status: resolved");
-      debugger;
-      return { status: "resolved", data: action.data, error: null };
+      toast.success("Data successfully loaded.", {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 5000,
+      });
+      return { status: Status.RESOLVED, data: action.data, error: null };
     }
-    case "rejected": {
+    case Status.REJECTED: {
       console.log("loadingStatusReducer---status: rejected");
-      return { status: "rejected", data: null, error: action.error };
+      toast.error("Failed to fetch: " + action.error, {
+        position: toast.POSITION.TOP_RIGHT,
+        autoClose: 10000,
+      });
+      return { status: Status.REJECTED, data: null, error: action.error };
+    }
+    case Status.FILTERED: {
+      return { status: Status.FILTERED, data: action.data, error: null };
     }
     default: {
       console.log("loadingStatusReducer---status: default/shouldnt happen");
@@ -24,13 +43,13 @@ function loadingStatusReducer(state, action) {
     }
   }
 }
-export const TransactionContext = React.createContext();
 
 export function TransactionContextProvider(props) {
-  const [transactionState, dispatch] = useReducer(loadingStatusReducer, {
-    transactions: [],
+  const [transactionState, dispatch] = useReducer(transactionReducer, {
+    data: [],
     status: "idle",
   });
+
   return (
     <TransactionContext.Provider value={[transactionState, dispatch]}>
       <TotalsPanel {...props} />

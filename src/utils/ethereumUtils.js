@@ -47,7 +47,14 @@ async function connectWallet() {
  * for each address, check the code to see if its a contract
  * @returns code Promise
  */
-async function getAddressCodes(addresses, web3State) {}
+async function getAddressCodes(addresses, web3State) {
+  const codePromises = [];
+  addresses.forEach((address) => {
+    // codePromises.push(web3.eth.getCode(address)); //TODO: convert to ethers
+  });
+
+  return Promise.all(codePromises);
+}
 
 /**
  *
@@ -117,7 +124,6 @@ export {
   getSigner,
   connectWallet,
   getBlocks,
-  getTxHashesFromBlocks,
   getAddressCodes,
   walletIsConnected,
   getTransactionsFromBlocks,

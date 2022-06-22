@@ -1,9 +1,13 @@
-import React, { useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TransactionContext } from "../Context/TransactionContextProvider";
 
 //TODO: rename to DisplayPanel
 const TotalsPanel = ({ web3State }) => {
   const [transactionState, dispatch] = useContext(TransactionContext);
+  const [totalEthTransferred, setTotalEthTransferred] = useState(0);
+  const [totalNumTransactions, setTotalNumTransactions] = useState(0);
+  const [totalNumContractAddresses, setTotalNumContractAddresses] = useState(0);
+
   const displayData = [
     {
       label: "Total Ether transferred (ETH)",
@@ -19,7 +23,13 @@ const TotalsPanel = ({ web3State }) => {
     },
   ];
 
-  function calculateTotalEthTransferred() {}
+  function calculateTotalEthTransferred() {
+    const { transactions } = transactionState;
+    const totalEthMoved =
+      transactions.length > 0 ? transactions.reduce((a, b) => a.add(b)) : "0";
+
+    return totalEthMoved;
+  }
 
   function calculateTotalNumTransactions() {}
 
