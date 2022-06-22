@@ -19,6 +19,12 @@ const TotalsPanel = ({ web3State }) => {
     },
   ];
 
+  function calculateTotalEthTransferred() {}
+
+  function calculateTotalNumTransactions() {}
+
+  function calculateTotalNumContractAddresses() {}
+
   //TODO: create functions to calculate these fields?
   useEffect(() => {
     console.log("transaction state: ", transactionState);
@@ -26,22 +32,16 @@ const TotalsPanel = ({ web3State }) => {
   }, []);
 
   return (
-    <div>Totals Placeholder</div>
-    // <Panel bsStyle="info" className="centeralign">
-    //   <Panel.Heading>
-    //     <Panel.Title componentClass="h3">Totals</Panel.Title>
-    //   </Panel.Heading>
-    //   <Panel.Body>
-    //     {displayData.map((data) => {
-    //       return (
-    //         <p>
-    //           <strong>{data.label}: </strong>
-    //           {data.value}
-    //         </p>
-    //       );
-    //     })}
-    //   </Panel.Body>
-    // </Panel>
+    <div>
+      {displayData.map((data) => {
+        return (
+          <p key={data.label}>
+            <strong>{data.label}: </strong>
+            {data.value}
+          </p>
+        );
+      })}
+    </div>
   );
 };
 

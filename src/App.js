@@ -7,22 +7,16 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { ethers } from "ethers";
 import abi from "./abis/WavePortal.json";
-// import TransactionProvider from "./components/Context/TransactionProvider";
 import { TransactionContextProvider } from "./components/";
-import {
-  BlockInput,
-  TransactionsTable,
-  Disclaimer,
-  TotalsPanel,
-} from "./components";
-import "./utils/ethereumUtils";
+import { BlockInput, Disclaimer, ConnectWalletButton } from "./components";
+import { connectWallet, walletIsConnected } from "./utils/ethereumUtils";
 
 const App = () => {
-  //Connect Wallet button should make the auth requests
-  //pass setCredentials from App as callback after auth
   const [web3State, setWeb3State] = useState({
     ethereum: null,
     account: null,
+    provider: null,
+    connected: false,
     contractAddress: "0x665935479A9A6ac151320DC637a27014Df5B44BD",
     contractAbi: abi.abi,
   });
@@ -34,82 +28,40 @@ const App = () => {
 
   useEffect(() => {
     console.log("App --- useEffect()");
-    //this needs to be called on button click instead
     const { ethereum } = window;
-    const loadWeb3State = async () => {
-      console.log("App --- useEffect() --- loadWeb3State");
-      const accounts = await ethereum.request({ method: "eth_accounts" });
-      if (accounts.length !== 0) {
-        console.log(
-          "App --- useEffect() --- loadWeb3State --- found an authorized account: ",
-          accounts[0]
-        );
-        setWeb3State({ ethereum, account: accounts[0] });
-      } else {
-        console.log(
-          "App --- useEffect() --- loadWeb3State --- no authorized account found"
-        );
-        throw new Error("no authorized account found");
+    const provider = new ethers.providers.Web3Provider(ethereum);
+    async function loadWeb3State() {
+      return walletIsConnected();
+    }
+    loadWeb3State().then((response) => {
+      const { connected, accounts } = response;
+      if (!connected) {
+        console.warn("Metamask not detected");
+        return;
       }
-    };
-    checkIfWalletIsConnected(ethereum);
-    loadWeb3State();
-    return () => console.log("App useEffect() --- cleanup");
+      const account = connected ? accounts[0] : null;
+      setWeb3State({
+        ethereum,
+        provider,
+        account,
+        connected,
+      });
+    });
   }, []);
 
-  function checkIfWalletIsConnected(ethereum) {
-    console.log("App --- checkIfWalletIsConnected");
-    if (!ethereum) {
-      console.log(
-        "App --- checkIfWalletIsConnected --- no web3 connection found. make sure you have metamask"
-      );
-      throw new Error("make sure you have metamask");
-    } else {
-      console.log(
-        "App --- checkIfWalletIsConnected --- we have the ethereum object: ",
-        ethereum
-      );
-    }
+  async function handleConnectWallet() {
+    const [ethereum, provider, account] = await connectWallet(setWeb3State);
+    setWeb3State({ ethereum, provider, account, connected: true });
   }
 
-  const connectWallet = async () => {
-    console.log("App --- connectWallet");
-    const { ethereum } = web3State;
-    if (!ethereum) {
-      console.log(
-        "App --- connectWallet --- no web3 wallet found. get metamask"
-      );
-      return;
-    }
-    const accounts = await ethereum.request({
-      method: "eth_requestAccounts",
-    });
-    console.log("App --- connectWallet --- Connected: ", accounts[0]);
-    setWeb3State({ account: accounts[0] });
-  };
-
-  const getCredentials = async () => {
-    console.log("App --- getCredentials");
-    const { ethereum } = web3State;
-    checkIfWalletIsConnected(ethereum);
-    const provider = new ethers.providers.Web3Provider(web3State.ethereum);
-    const signer = provider.getSigner();
-    return [provider, signer];
-  };
-
-  const getWaveContract = async () => {
-    console.log("App --- getWaveContract");
-    const [, signer] = getCredentials();
-    const { contractAddress, contractAbi } = web3State;
-    const wavePortalContract = new ethers.Contract(
-      contractAddress,
-      contractAbi,
-      signer
-    );
-  };
-
-  const onBlockInputSubmit = (startBlock, endBlock) => {
+  function onBlockInputSubmit(startBlock, endBlock) {
     setBlockInputs({ startBlock, endBlock });
+  }
+
+  const disclaimerMessage = () => {
+    const msg = `In order for this app to load successfully, you must have a Metamask
+          account that is connected to the Rinkeby testnet (Ethereum).`;
+    return msg;
   };
   const styles = {
     blockInput: {
@@ -126,27 +78,32 @@ const App = () => {
         <h1 className="App-title">Block Explorer</h1>
       </header>
       <ToastContainer />
+
       <Row>
-        <Col md={1} />
-        <Col md={10} style={styles.blockInput}>
+        <Col md={2} />
+        <Col md={8} style={styles.blockInput}>
           <BlockInput onSubmit={onBlockInputSubmit} />
         </Col>
-        <Col md={1} />
+        <Col md={2}>
+          {!web3State.connected ? (
+            <ConnectWalletButton connectWalletCb={handleConnectWallet} />
+          ) : (
+            <div> Connected</div>
+          )}{" "}
+        </Col>
       </Row>
       <br />
 
       <Row>
-        <Col md={1} />
-        <Col md={10}>
-          {/* <TotalsPanel transactions={[]} /> */}
+        <Col md={2} />
+        <Col md={8}>
           <TransactionContextProvider
             web3State={web3State}
             blockInputs={blockInputs}
           />
-          {/* <TransactionsTable web3State={web3State} blockInputs={blockInputs} /> */}
-          <Disclaimer message={"disclaimer"} />
+          <Disclaimer message={disclaimerMessage()} />
         </Col>
-        <Col md={1} />
+        <Col md={2} />
       </Row>
     </div>
   );

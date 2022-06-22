@@ -1,42 +1,53 @@
-import React, { useState, useReducer, useEffect, useContext } from "react";
-import { ethers } from "ethers";
+import React, { useEffect, useContext } from "react";
 import Table from "react-bootstrap/Table";
 import "./TransactionsTable.css";
 import { TransactionContext } from "../Context/TransactionContextProvider";
+import {
+  getBlocks,
+  getTxHashesFromBlocks,
+  getTransactionsFromBlocks,
+} from "../../utils/ethereumUtils";
+
+const tableHeaders = [
+  {
+    key: "h1",
+    value: "Header 1",
+  },
+  {
+    key: "h2",
+    value: "Header 2",
+  },
+];
 
 function TableDisplay({ headers, data = [] }) {
   console.log("TableDisplay ---- render");
   const tableContent = () => {
     return data.length === 0 ? (
-      <div>No Records Found.</div>
+      <strong>No Records Found.</strong>
     ) : (
-      data.map((items, index) => (
-        <tr key={`row-${index}`} className="tableRow results-row">
-          {items.map((item, index) => (
-            <td key={`column-${index}`}>{item}</td>
+      <Table striped bordered condensed="true" hover>
+        <thead>
+          <tr>
+            {headers.map((header) => (
+              <th key={header.key}>{header.value}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => (
+            <tr key={`row-${item.hash}`} className="tableRow results-row">
+              <td key={`column-${item.hash}`}>{item.value.toString()}</td>
+            </tr>
           ))}
-        </tr>
-      ))
+        </tbody>
+      </Table>
     );
   };
-  return (
-    <Table striped bordered condensed hover>
-      <thead>
-        <tr>
-          {headers.map((header) => (
-            <th key={header}>{header}</th>
-          ))}
-        </tr>
-      </thead>
-      <tbody>{tableContent()}</tbody>
-    </Table>
-  );
+  return tableContent();
 }
 
 const TransactionsTable = ({ web3State, blockInputs }) => {
   console.log("TransactionTable ---- render");
-  const headers = ["Header 1", "Header 2"];
-  const { ethereum } = web3State;
   const { startBlock, endBlock } = blockInputs;
   const [transactionState, dispatch] = useContext(TransactionContext);
 
@@ -46,15 +57,34 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
     if (!startBlock) {
       return;
     }
-    loadTransactionData(startBlock, endBlock);
+
+    async function loadTransactionData() {
+      dispatch({
+        data: [],
+        type: "pending",
+      });
+
+      const blocks = await getBlocks(startBlock, endBlock, web3State);
+      const hashes = getTxHashesFromBlocks(blocks);
+      console.log("hashes: ", hashes);
+
+      const transactions = await getTransactionsFromBlocks(blocks, web3State);
+      console.log("transactions: ", Array.from(transactions));
+      dispatch({
+        data: transactions,
+        type: "resolved",
+      });
+    }
+
+    loadTransactionData();
   }, [startBlock, endBlock]);
 
   switch (transactionState.status) {
-    case "idle":
+    case "idle": //TODO: status enum
       console.log("TransactionTable ---- idle");
-      return <div>Submit a block range</div>;
+      return <div>Submit a block range</div>; //TODO: styling
     case "pending":
-      console.log("TransactionTable ---- pending");
+      console.log("TransactionTable ---- pending"); //TODO: styling
       return (
         <a id="loader" className="text-center">
           Loading...
@@ -65,19 +95,12 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
       throw new Error("promise rejected");
     case "resolved":
       console.log("TransactionTable ---- resolved");
+      debugger;
       return (
-        <TableDisplay headers={headers} data={transactionState.transactions} />
+        <TableDisplay headers={tableHeaders} data={transactionState.data} />
       );
     default:
       throw new Error("This should be impossible");
-  }
-
-  // TODO: dispatch status change here
-  function loadTransactionData(block1, block2) {
-    dispatch({ type: "pending" });
-    console.log(
-      `cue loading transaction data.....block1=${block1} block2=${block2}`
-    );
   }
 };
 

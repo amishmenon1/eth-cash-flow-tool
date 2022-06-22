@@ -23,7 +23,7 @@ const BlockInput = ({ onSubmit }) => {
   };
 
   const handleSubmit = (e) => {
-    onSubmit(startRef.current.value, endRef.current.value);
+    onSubmit(parseInt(startRef.current.value), parseInt(endRef.current.value));
   };
 
   const requiredFieldStyle = { color: "red" };
@@ -44,7 +44,7 @@ const BlockInput = ({ onSubmit }) => {
           <input
             id="start-block-input"
             ref={startRef}
-            type="text"
+            type="number"
             onChange={onStartBlockChange}
             className="form-control form-control-lg"
             placeholder="10305800"
@@ -61,7 +61,7 @@ const BlockInput = ({ onSubmit }) => {
           <input
             id="end-block-input"
             ref={endRef}
-            type="text"
+            type="number"
             onChange={onEndBlockChange}
             className="form-control form-control-lg"
             placeholder="10305827"
