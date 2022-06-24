@@ -12,8 +12,12 @@ function transactionReducer(state, action) {
   switch (action.type) {
     case Status.IDLE: {
       console.log("loadingStatusReducer---status: idle");
-
-      return { status: Status.IDLE, data: null, error: null };
+      return {
+        status: Status.IDLE,
+        data: null,
+        error: null,
+        endStatusCallback: state.endStatusCallback,
+      };
     }
     case Status.PENDING: {
       console.log("loadingStatusReducer---status: pending");
@@ -21,7 +25,12 @@ function transactionReducer(state, action) {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 10000,
       });
-      return { status: Status.PENDING, data: null, error: null };
+      return {
+        status: Status.PENDING,
+        data: null,
+        error: null,
+        endStatusCallback: state.endStatusCallback,
+      };
     }
     case Status.RESOLVED: {
       console.log("loadingStatusReducer---status: resolved");
@@ -29,7 +38,12 @@ function transactionReducer(state, action) {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
       });
-      return { status: Status.RESOLVED, data: action.data, error: null };
+      return {
+        status: Status.RESOLVED,
+        data: action.data,
+        error: null,
+        endStatusCallback: state.endStatusCallback,
+      };
     }
     case Status.REJECTED: {
       console.log("loadingStatusReducer---status: rejected");
@@ -37,10 +51,20 @@ function transactionReducer(state, action) {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 10000,
       });
-      return { status: Status.REJECTED, data: null, error: action.error };
+      return {
+        status: Status.REJECTED,
+        data: null,
+        error: action.error,
+        endStatusCallback: state.endStatusCallback,
+      };
     }
     case Status.FILTERED: {
-      return { status: Status.FILTERED, data: action.data, error: null };
+      return {
+        status: Status.FILTERED,
+        data: action.data,
+        error: null,
+        endStatusCallback: state.endStatusCallback,
+      };
     }
     default: {
       console.log("loadingStatusReducer---status: default/shouldnt happen");
@@ -49,16 +73,25 @@ function transactionReducer(state, action) {
   }
 }
 
-export function TransactionContextProvider(props) {
+export function TransactionContextProvider({
+  web3State,
+  blockInputs,
+  endStatusCallback,
+}) {
   const [transactionState, dispatch] = useReducer(transactionReducer, {
     data: [],
     status: Status.IDLE,
+    endStatusCallback: endStatusCallback,
   });
 
   return (
     <TransactionContext.Provider value={[transactionState, dispatch]}>
-      <TotalsPanel {...props} />
-      <TransactionsTable {...props} />
+      <TotalsPanel web3State={web3State} />
+      <TransactionsTable
+        web3State={web3State}
+        blockInputs={blockInputs}
+        endStatusCallback={endStatusCallback}
+      />
     </TransactionContext.Provider>
   );
 }

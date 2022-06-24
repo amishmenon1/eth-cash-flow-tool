@@ -26,6 +26,8 @@ const App = () => {
     endBlock: null,
   });
 
+  const [blockInputsDisabled, setBlockInputsDisabled] = useState(false);
+
   useEffect(() => {
     console.log("App --- useEffect()");
     const { ethereum } = window;
@@ -54,8 +56,14 @@ const App = () => {
     setWeb3State({ ethereum, provider, account, connected: true });
   }
 
-  function onBlockInputSubmit(startBlock, endBlock) {
-    setBlockInputs({ startBlock, endBlock });
+  function onBlockInputSubmit(newStart, newEnd) {
+    const startBlockChanged = newStart !== blockInputs.startBlock;
+    const endBlockChanged = newEnd !== blockInputs.endBlock;
+    if (startBlockChanged || endBlockChanged) {
+      setBlockInputsDisabled(true);
+    }
+
+    setBlockInputs({ startBlock: newStart, endBlock: newEnd });
   }
 
   const disclaimerMessage = () => {
@@ -97,7 +105,10 @@ const App = () => {
       <Row>
         <Col md={2} />
         <Col md={8} style={styles.blockInput}>
-          <BlockInput onSubmit={onBlockInputSubmit} />
+          <BlockInput
+            onSubmit={onBlockInputSubmit}
+            fetchDisabled={blockInputsDisabled}
+          />
         </Col>
         <Col md={2} />
       </Row>
@@ -109,6 +120,7 @@ const App = () => {
           <TransactionContextProvider
             web3State={web3State}
             blockInputs={blockInputs}
+            endStatusCallback={() => setBlockInputsDisabled(false)}
           />
           <Disclaimer message={disclaimerMessage()} />
         </Col>

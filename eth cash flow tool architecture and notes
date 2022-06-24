@@ -4,16 +4,20 @@ TODO:
 	
 	ConnectedWallet
 		- show connected network
+
 	TableDisplay
-		- set fixed height with scroll
 		- 
+
 	TotalsPanel
 		- calculate totals
 		- display totals
 
 	TableFilterComponent
 		- auto-select default
+		- dynamically change variant between primary and secondary when toggling
 
+	BlockInput
+		
 
 	- style 
 		- table filter
@@ -21,6 +25,9 @@ TODO:
 		- disclaimer
 
 
+	---- disable Fetch button when data loading
+	---- TableDisplay set fixed height with scroll
+	---- only render when table is rendered and auto-select default
 	---- update headers
 	---- update table values
 	---- add table filter
