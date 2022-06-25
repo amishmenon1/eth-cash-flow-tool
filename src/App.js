@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import logo from "./images/magnifying-glass-icon.png";
 import "./App.css";
 import Col from "react-bootstrap/Col";
@@ -39,6 +39,10 @@ const App = () => {
       const { connected, accounts } = response;
       if (!connected) {
         console.warn("Metamask not detected");
+        toast.warn("Metamask not detected", {
+          position: toast.POSITION.TOP_RIGHT,
+          autoClose: 5000,
+        });
         return;
       }
       const account = connected ? accounts[0] : null;
@@ -67,8 +71,8 @@ const App = () => {
   }
 
   const disclaimerMessage = () => {
-    const msg = `In order for this app to load successfully, you must have a Metamask
-          account that is connected to the Rinkeby testnet (Ethereum).`;
+    const msg = `In order for this app to work successfully, you must have a Metamask or Web3 provider
+          account setup.`;
     return msg;
   };
   const styles = {
@@ -122,10 +126,12 @@ const App = () => {
             blockInputs={blockInputs}
             endStatusCallback={() => setBlockInputsDisabled(false)}
           />
-          <Disclaimer message={disclaimerMessage()} />
         </Col>
         <Col md={2} />
       </Row>
+      <footer className="App-footer" style={{ marginTop: "20px" }}>
+        <Disclaimer message={disclaimerMessage()} />
+      </footer>
     </div>
   );
 };

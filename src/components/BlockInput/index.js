@@ -1,7 +1,6 @@
 import React, { useState, useRef } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import "./BlockInput.css";
 
 const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
   const NUMBERS_PATTERN = /^[0-9\b]+$/;
@@ -12,26 +11,28 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
   const numbersOnly = (val) =>
     !val || NUMBERS_PATTERN.test(val) ? null : "Numbers only";
 
-  const onStartBlockChange = (e) => {
+  function onStartBlockChange(e) {
     setError(numbersOnly(e.target.value));
-  };
+  }
 
-  const onEndBlockChange = (e) => {
+  function onEndBlockChange(e) {
     if (e.target.value !== null) {
       setError(numbersOnly(e.target.value));
     }
-  };
+  }
 
-  const handleSubmit = (e) => {
+  function handleSubmit(e) {
     onSubmit(parseInt(startRef.current.value), parseInt(endRef.current.value));
+  }
+
+  const styles = {
+    fetchData: {
+      marginBottom: "10px",
+      marginTop: "10px",
+    },
+
+    requiredField: { color: "red" },
   };
-
-  // function fetchButtonDisabled() {
-  //   debugger;
-  //   return fetchDisabled || Boolean(error);
-  // }
-
-  const requiredFieldStyle = { color: "red" };
 
   return (
     <form
@@ -44,7 +45,7 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
       <Row>
         <Col md={12}>
           <label htmlFor="start-block-input" className="float-left text-muted">
-            <b>Start Block</b> <b style={requiredFieldStyle}>*</b>
+            <b>Start Block</b> <b style={styles.requiredFieldStyle}>*</b>
           </label>
           <input
             id="start-block-input"
@@ -76,7 +77,7 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
         </Col>
       </Row>
       <Row>
-        <div role="alert" style={{ color: "red" }}>
+        <div role="alert" style={styles.requiredField}>
           {error}
         </div>
       </Row>
@@ -84,8 +85,8 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
       <button
         type="submit"
         disabled={fetchDisabled}
-        style={{ marginBottom: "10px" }}
-        className="btn btn-primary btn-block btn-lg fetch-data-button"
+        style={styles.fetchData}
+        className="btn btn-primary btn-block btn-lg"
       >
         Fetch Data!
       </button>

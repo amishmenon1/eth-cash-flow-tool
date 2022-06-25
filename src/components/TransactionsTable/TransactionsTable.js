@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
 import { Button } from "react-bootstrap";
-import "./TransactionsTable.css";
 import { TransactionContext } from "../Context/TransactionContextProvider";
 import { TableFilterComponent, TableDisplay } from "./";
 import {
@@ -21,12 +20,13 @@ function TableIfExists(transactionState, tableState) {
       Loading...
     </Button>
   );
+
   switch (transactionState.status) {
     case Status.IDLE:
       console.log("Status ---- idle");
-      return <div>*** Submit a block range ***</div>; //TODO: styling
+      return <div>*** Submit a block range ***</div>;
     case Status.PENDING:
-      console.log("Status ---- pending"); //TODO: styling
+      console.log("Status ---- pending");
       return loader;
     case Status.REJECTED:
       console.log("Status ---- rejected");
@@ -34,7 +34,6 @@ function TableIfExists(transactionState, tableState) {
     case Status.RESOLVED:
       console.log("Status ---- resolved");
       const { data, headers } = tableState;
-      const { endStatusCallback } = transactionState;
       const noRecordsFound = transactionState.data.length === 0;
       const recordsNotRenderedYet =
         transactionState.data.length > 0 && data.length === 0;
@@ -54,9 +53,9 @@ function TableIfExists(transactionState, tableState) {
     case Status.FILTERED: {
       console.log("Status ---- filtered");
       return (
-        <>
-          <TableDisplay headers={tableState.headers} data={tableState.data} />
-        </>
+        <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
+          <TableDisplay headers={headers} data={data} />
+        </div>
       );
     }
     default:
