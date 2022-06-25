@@ -14,6 +14,7 @@ import {
 } from "./utils/ethereumUtils";
 
 const App = () => {
+  console.log("App component -- render");
   const [web3State, setWeb3State] = useState({
     ethereum: null,
     account: null,
@@ -29,7 +30,7 @@ const App = () => {
   const [blockInputsDisabled, setBlockInputsDisabled] = useState(false);
 
   useEffect(() => {
-    console.log("App --- useEffect()");
+    console.log("App --- useEffect() -- render");
     const { ethereum } = window;
     const provider = getEthereumProvider(ethereum);
     async function loadWeb3State() {

@@ -5,11 +5,13 @@ import {
   getToAddresses,
   getAddressCodes,
   isContractCode,
+  toEther,
 } from "../../utils/ethereumUtils";
 import { BigNumber } from "ethers";
+import Totals from "../../global/Totals";
 
 const TotalsPanel = ({ web3State }) => {
-  const [transactionState, dispatch] = useContext(TransactionContext);
+  const [transactionState] = useContext(TransactionContext);
   const [displayData, setDisplayData] = useState({
     data: [],
     totalsLoaded: false,
@@ -24,11 +26,12 @@ const TotalsPanel = ({ web3State }) => {
   };
 
   useEffect(() => {
-    console.log("TotalsPanel useEffect() --- render");
+    console.log(
+      "TotalsPanel component --- useEffect(transactionState) --- render"
+    );
     if (!transactionState.data || transactionState.data.length === 0) {
       console.log(
-        "TotalsPanel useEffect() --- base case--- transactionState: ",
-        transactionState
+        "TotalsPanel component --- useEffect(transactionState) --- base case"
       );
       return;
     }
@@ -42,30 +45,27 @@ const TotalsPanel = ({ web3State }) => {
       setDisplayData({
         data: [
           {
-            label: "Total Ether transferred (ETH)",
+            label: Totals.TOTAL_ETH_MOVED.label,
             value: totalEthTransferred,
           },
           {
-            label: "Total # transactions",
+            label: Totals.TOTAL_NUM_TRANSACTIONS.label,
             value: totalNumTransactions,
           },
           {
-            label: 'Total # contract addresses ("0x")',
+            label: Totals.TOTAL_NUM_CONTRACT_ADDRESSES.label,
             value: totalNumContractAddresses,
           },
         ],
         totalsLoaded: true,
       });
     });
-  }, [transactionState]);
 
-  useEffect(() => {
-    console.log(
-      "TotalsPanel useEffect render -- transaction state: ",
-      transactionState
-    );
-    console.log("TotalsPanel useEffect render -- web3 state: ", web3State);
-  }, []);
+    return () => {
+      console.log("TotalsPanel --- useEffect(transactionState) --- cleanup");
+      setDisplayData({ totalsLoaded: false });
+    };
+  }, [transactionState]);
 
   function getTotalEthTransferred() {
     const { data } = transactionState;
@@ -75,7 +75,9 @@ const TotalsPanel = ({ web3State }) => {
         ? values.reduce((a, b) => a.add(b))
         : BigNumber.from("0");
 
-    return totalEthMoved.toNumber();
+    const wei = totalEthMoved.toString();
+    const eth = toEther(wei);
+    return eth;
   }
 
   function getTotalNumContractAddresses() {

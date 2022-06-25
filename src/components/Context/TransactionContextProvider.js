@@ -3,15 +3,15 @@ import { TransactionsTable } from "../";
 import { TotalsPanel } from "../";
 import { toast } from "react-toastify";
 
-import Status from "../../enum/Status";
+import Status from "../../global/Status";
 
 export const TransactionContext = React.createContext();
 
 function transactionReducer(state, action) {
-  console.log("loadingStatusReducer---");
+  console.log("TxContextProvider --- TxReducer --- render");
   switch (action.type) {
     case Status.IDLE: {
-      console.log("loadingStatusReducer---status: idle");
+      console.log("TxContextProvider --- TxReducer --- status: idle");
       return {
         status: Status.IDLE,
         data: null,
@@ -20,7 +20,7 @@ function transactionReducer(state, action) {
       };
     }
     case Status.PENDING: {
-      console.log("loadingStatusReducer---status: pending");
+      console.log("TxContextProvider --- TxReducer --- status: pending");
       toast.warn("Loading all data. This could take a few minutes.", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -33,7 +33,7 @@ function transactionReducer(state, action) {
       };
     }
     case Status.RESOLVED: {
-      console.log("loadingStatusReducer---status: resolved");
+      console.log("TxContextProvider --- TxReducer --- status: resolved");
       toast.success("Data successfully loaded.", {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 5000,
@@ -46,7 +46,10 @@ function transactionReducer(state, action) {
       };
     }
     case Status.REJECTED: {
-      console.log("loadingStatusReducer---status: rejected");
+      console.log(
+        "TxContextProvider --- TxReducer --- status: rejected",
+        action.error
+      );
       toast.error("Failed to fetch: " + action.error, {
         position: toast.POSITION.TOP_RIGHT,
         autoClose: 10000,
@@ -67,7 +70,7 @@ function transactionReducer(state, action) {
       };
     }
     default: {
-      console.log("loadingStatusReducer---status: default/shouldnt happen");
+      console.log("TxContextProvider --- TxReducer --- should not occur");
       throw new Error(`Unhandled action type: ${action.type}`);
     }
   }
