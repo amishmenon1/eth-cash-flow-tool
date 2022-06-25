@@ -1,5 +1,5 @@
 import BlockInput from "./BlockInput";
-import TransactionsTable from "./TransactionsTable";
+import TransactionsTable from "./TransactionsTable/TransactionsTable";
 import Disclaimer from "./Disclaimer";
 import TotalsPanel from "./TotalsPanel";
 import ConnectWalletButton from "./ConnectWalletButton";
