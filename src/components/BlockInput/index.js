@@ -3,7 +3,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import "./BlockInput.css";
 
-const BlockInput = ({ onSubmit }) => {
+const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
   const NUMBERS_PATTERN = /^[0-9\b]+$/;
   const [error, setError] = useState(null);
   const startRef = useRef();
@@ -25,6 +25,11 @@ const BlockInput = ({ onSubmit }) => {
   const handleSubmit = (e) => {
     onSubmit(parseInt(startRef.current.value), parseInt(endRef.current.value));
   };
+
+  // function fetchButtonDisabled() {
+  //   debugger;
+  //   return fetchDisabled || Boolean(error);
+  // }
 
   const requiredFieldStyle = { color: "red" };
 
@@ -78,7 +83,8 @@ const BlockInput = ({ onSubmit }) => {
 
       <button
         type="submit"
-        disabled={Boolean(error)}
+        disabled={fetchDisabled}
+        style={{ marginBottom: "10px" }}
         className="btn btn-primary btn-block btn-lg fetch-data-button"
       >
         Fetch Data!

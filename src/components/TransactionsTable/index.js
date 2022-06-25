@@ -17,9 +17,15 @@ const TableFilterComponent = ({ toggleCallback }) => {
   const filters = [SENDER, RECIPIENT];
 
   return (
-    <ButtonGroup justified="true" size="lg" className="mb-2">
+    <ButtonGroup
+      style={{ paddingTop: "10px", paddingBottom: "20px" }}
+      justified="true"
+      size="lg"
+      className="mb-2"
+    >
       {filters.map((filter) => (
         <Button
+          style={{ height: "35px", fontSize: "inherit" }}
           onClick={(element) => {
             toggleCallback(element.target.value);
           }}
@@ -62,37 +68,38 @@ function TableDisplay({ headers, data = [] }) {
 }
 
 function TableIfExists(transactionState, tableState) {
+  const loader = (
+    <Button variant="link" id="loader" className="text-center">
+      Loading...
+    </Button>
+  );
   switch (transactionState.status) {
     case Status.IDLE:
       console.log("Status ---- idle");
-      return <div>Submit a block range</div>; //TODO: styling
+      return <div>*** Submit a block range ***</div>; //TODO: styling
     case Status.PENDING:
       console.log("Status ---- pending"); //TODO: styling
-      return (
-        <a id="loader" className="text-center">
-          Loading...
-        </a>
-      );
+      return loader;
     case Status.REJECTED:
       console.log("Status ---- rejected");
       throw new Error("promise rejected");
     case Status.RESOLVED:
       console.log("Status ---- resolved");
       const { data, headers } = tableState;
+      const { endStatusCallback } = transactionState;
+      const noRecordsFound = transactionState.data.length === 0;
+      const recordsNotRenderedYet =
+        transactionState.data.length > 0 && data.length === 0;
       let display;
-      if (transactionState.data.length === 0) {
+      if (noRecordsFound) {
         display = <div>No Records Found.</div>;
-      } else if (transactionState.data.length > 0 && data.length === 0) {
-        display = (
-          <a id="loader" className="text-center">
-            Loading...
-          </a>
-        );
+      } else if (recordsNotRenderedYet) {
+        display = loader;
       } else {
         display = (
-          <>
+          <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
             <TableDisplay headers={headers} data={data} />
-          </>
+          </div>
         );
       }
       return display;
@@ -118,16 +125,20 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
     data: [],
     headers: senderHeaders,
   });
+
+  /**
+   * Re-load transaction data anytime a new start or end block is submitted
+   */
   useEffect(() => {
     console.log(
-      "TransactionsTable useEffect- start, end -- before check -- status: ",
+      "TransactionsTable useEffect(start, end) -- render -- status: ",
       transactionState.status
     );
 
     if (!startBlock || !selectedFilter) {
       return;
     }
-    console.log("TransactionsTable useEffect- start, end -- after check");
+    console.log("TransactionsTable useEffect(start, end) -- after base case");
     async function loadTransactionData() {
       dispatch({
         type: Status.PENDING,
@@ -141,34 +152,31 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
         data: transactions,
         type: Status.RESOLVED,
       });
-      return () => {
-        console.log("TransactionsTable useEffect- start, end -- CLEANUP");
-      };
     }
 
     loadTransactionData();
     return () => {
-      console.log("txTable useEffect - cleanup");
+      console.log("TransactionsTable useEffect(start, end) - cleanup");
     };
   }, [startBlock, endBlock]);
 
   useEffect(() => {
     console.log(
-      "TransactionsTable useEffect- txData, selectedFilter -- before check -- status: ",
+      "TransactionsTable useEffect(txData, selectedFilter) -- render -- current status: ",
       transactionState.status
     );
     if (!selectedFilter || transactionState.status !== Status.RESOLVED) {
       console.log(
-        "TransactionsTable useEffect- txData, selectedFilter -- break case, return"
+        "TransactionsTable useEffect(txData, selectedFilter) -- base case hit, returned nothing. "
       );
       return;
     }
     console.log(
-      "TransactionsTable useEffect- txData, selectedFilter -- after check: ",
+      "TransactionsTable useEffect(txData, selectedFilter) -- after base case: ",
       transactionState.data,
       selectedFilter.value
     );
-    const groupedTransactions = filterTransactions(
+    const groupedTransactions = groupAndFilterTransactions(
       transactionState.data,
       selectedFilter.value
     );
@@ -179,8 +187,18 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
     });
   }, [transactionState.data, selectedFilter]);
 
-  function filterTransactions(data, selectedFilter) {
-    const groupedTransactions = groupTransactions(data, selectedFilter);
+  useEffect(() => {
+    console.log("TransactionTable useEffect status resolved --- render");
+    if (transactionState.status === Status.RESOLVED) {
+      console.log("TransactionTable useEffect status resolved --- after check");
+      transactionState.endStatusCallback();
+    }
+  }, [transactionState.status]);
+
+  function groupAndFilterTransactions(data, selectedFilter) {
+    const groupedTransactions = groupTransactions(data, selectedFilter).filter(
+      (tx) => !!tx.address
+    );
     return groupedTransactions;
   }
 
@@ -194,7 +212,9 @@ const TransactionsTable = ({ web3State, blockInputs }) => {
 
   return (
     <>
-      <TableFilterComponent toggleCallback={handleFilterToggle} />
+      {transactionState.status === Status.RESOLVED && (
+        <TableFilterComponent toggleCallback={handleFilterToggle} />
+      )}
       {TableIfExists(transactionState, tableState)}
     </>
   );

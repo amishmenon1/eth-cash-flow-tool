@@ -1,20 +1,60 @@
 import { BigNumber } from "ethers";
 
-// const mapToSenderAddress = (tx) => tx.from;
-// const mapToSenderTransaction = (t) => {
-//   return {
-//     from: t.from,
-//     value: BigNumber.from(t.value),
-//   };
-// };
-// const mapToRecipientAddress = (tx) => tx.to;
-// const mapToRecipientTransaction = (t) => {
-//   return {
-//     to: t.to,
-//     value: BigNumber.from(t.value),
-//   };
-// };
-// const isContractCode = (c) => c === "0x";
+const mapToSenderAddress = (tx) => tx.from;
+const mapToSenderTransaction = (t) => {
+  return {
+    from: t.from,
+    value: BigNumber.from(t.value),
+  };
+};
+const mapToRecipientAddress = (tx) => tx.to;
+const mapToRecipientTransaction = (t) => {
+  return {
+    to: t.to,
+    value: BigNumber.from(t.value),
+  };
+};
+const isContractCode = (c) => c === "0x";
+
+const getFromAddresses = (txList) => {
+  return getMappedAddresses(txList, mapToSenderAddress);
+};
+
+const getToAddresses = (txList) => {
+  return getMappedAddresses(txList, mapToRecipientAddress);
+};
+
+/**
+ *
+ * @param {Array} txList the list of transactions
+ * @param {string} mappedProps the map key
+ * @returns mapped list of addresses
+ */
+const getMappedAddresses = (txList, mapFunction) => {
+  let addresses;
+  if (txList && txList.constructor === Array) {
+    addresses = txList.map(mapFunction).filter((addr) => !!addr);
+  } else {
+    addresses = [];
+  }
+  return addresses;
+};
+
+/**
+ *
+ * @param {Array} addresses
+ * for each address, check the code to see if its a contract
+ * @returns code Promise
+ */
+const getAddressCodes = async (addresses) => {
+  const codePromises = [];
+  addresses.forEach((address) => {
+    //#TODO: replace with ethers
+    // codePromises.push(web3.eth.getCode(address));
+  });
+
+  return Promise.all(codePromises);
+};
 
 /**
  *
@@ -41,4 +81,4 @@ function groupTransactions(txArray, groupByKey, x) {
   return totals;
 }
 
-export { groupTransactions };
+export { groupTransactions, getFromAddresses, getToAddresses, getAddressCodes };
