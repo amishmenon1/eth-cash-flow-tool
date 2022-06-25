@@ -44,21 +44,6 @@ async function connectWallet() {
 
 /**
  *
- * @param {Array} addresses
- * for each address, check the code to see if its a contract
- * @returns code Promise
- */
-async function getAddressCodes(addresses, web3State) {
-  const codePromises = [];
-  addresses.forEach((address) => {
-    // codePromises.push(web3.eth.getCode(address)); //TODO: convert to ethers
-  });
-
-  return Promise.all(codePromises);
-}
-
-/**
- *
  * @param {number} start start block number
  * @param {number} end end block number
  * @returns range from start to end values
@@ -120,12 +105,60 @@ function getTransactionsFromBlocks(blocks = [], web3State) {
   return Promise.all(promises);
 }
 
+const mapToSenderAddress = (tx) => tx.from;
+const mapToRecipientAddress = (tx) => tx.to;
+const isContractCode = (c) => c === "0x";
+
+function getFromAddresses(txList) {
+  return getMappedAddresses(txList, mapToSenderAddress);
+}
+
+function getToAddresses(txList) {
+  return getMappedAddresses(txList, mapToRecipientAddress);
+}
+
+/**
+ *
+ * @param {Array} txList the list of transactions
+ * @param {string} mappedProps the map key
+ * @returns mapped list of addresses
+ */
+function getMappedAddresses(txList, mapFunction) {
+  let addresses;
+  if (txList && txList.constructor === Array) {
+    addresses = txList.map(mapFunction).filter((addr) => !!addr);
+  } else {
+    addresses = [];
+  }
+  return addresses;
+}
+
+/**
+ *
+ * @param {Array} addresses
+ * for each address, check the code to see if its a contract
+ * @returns code Promise
+ */
+async function getAddressCodes(addresses, web3State) {
+  const { provider } = web3State;
+  const codePromises = [];
+  addresses.forEach((address) => {
+    //#TODO: replace with ethers
+    codePromises.push(provider.getCode(address));
+  });
+
+  return Promise.all(codePromises);
+}
+
 export {
   getEthereumProvider,
   getSigner,
   connectWallet,
   getBlocks,
-  getAddressCodes,
   walletIsConnected,
   getTransactionsFromBlocks,
+  getAddressCodes,
+  isContractCode,
+  getFromAddresses,
+  getToAddresses,
 };
