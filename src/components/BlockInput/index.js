@@ -3,6 +3,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
 const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
+  console.log("BlockInput component -- render");
   const NUMBERS_PATTERN = /^[0-9\b]+$/;
   const [error, setError] = useState(null);
   const startRef = useRef();

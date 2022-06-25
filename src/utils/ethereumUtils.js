@@ -1,5 +1,9 @@
 import { ethers } from "ethers";
 
+function toEther(wei) {
+  return ethers.utils.formatEther(wei, "Ether");
+}
+
 function getEthereumProvider(ethereum) {
   return new ethers.providers.Web3Provider(ethereum);
 }
@@ -29,7 +33,7 @@ async function connectWallet() {
   try {
     const { ethereum } = window;
     if (!ethereum) {
-      console.log("you need metamask");
+      console.warn("you need metamask");
       return;
     }
     const accounts = await ethereum.request({
@@ -152,4 +156,5 @@ export {
   isContractCode,
   getFromAddresses,
   getToAddresses,
+  toEther,
 };

@@ -2,7 +2,7 @@ import React from "react";
 import { Table } from "react-bootstrap";
 
 const TableDisplay = ({ headers, data = [] }) => {
-  console.log("TableDisplay ---- render");
+  console.log("TableDisplay component ---- render");
   const tableStyles = {
     maxHeight: "400px",
     overflowY: "scroll",

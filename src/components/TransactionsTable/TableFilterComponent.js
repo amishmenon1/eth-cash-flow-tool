@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { Button, ButtonGroup } from "react-bootstrap";
-import TableFilter from "../../enum/TableFilter";
+import TableFilter from "../../global/TableFilter";
 
 const { SENDER, RECIPIENT } = TableFilter;
 
