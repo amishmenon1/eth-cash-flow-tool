@@ -23,7 +23,7 @@ function transactionReducer(state, action) {
       console.log("loadingStatusReducer---status: pending");
       toast.warn("Loading all data. This could take a few minutes.", {
         position: toast.POSITION.TOP_RIGHT,
-        autoClose: 10000,
+        autoClose: 5000,
       });
       return {
         status: Status.PENDING,

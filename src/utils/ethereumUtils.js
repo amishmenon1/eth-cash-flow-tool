@@ -81,12 +81,6 @@ function getTxHashesFromBlocks(blocks) {
   return hashes;
 }
 
-/**
- *
- * @param {Array} hashes
- * gets transaction promises from tx hashes
- * @returns transaction Promise
- */
 function getTransactionsFromBlocks(blocks = [], web3State) {
   const { provider } = web3State;
   if (!provider) {
@@ -96,12 +90,10 @@ function getTransactionsFromBlocks(blocks = [], web3State) {
   const hashes = getTxHashesFromBlocks(blocks);
   const promises = [];
 
-  // for each hash, store promise to get the transaction by hash
   hashes.forEach((hash) => {
     promises.push(provider.getTransaction(hash));
   });
 
-  // collectively call all transaction promises
   return Promise.all(promises);
 }
 
@@ -120,7 +112,7 @@ function getToAddresses(txList) {
 /**
  *
  * @param {Array} txList the list of transactions
- * @param {string} mappedProps the map key
+ * @param {function} mapFunction the map function
  * @returns mapped list of addresses
  */
 function getMappedAddresses(txList, mapFunction) {
@@ -137,13 +129,12 @@ function getMappedAddresses(txList, mapFunction) {
  *
  * @param {Array} addresses
  * for each address, check the code to see if its a contract
- * @returns code Promise
+ * @returns codes
  */
 async function getAddressCodes(addresses, web3State) {
   const { provider } = web3State;
   const codePromises = [];
   addresses.forEach((address) => {
-    //#TODO: replace with ethers
     codePromises.push(provider.getCode(address));
   });
 

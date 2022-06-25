@@ -8,11 +8,20 @@ import {
 } from "../../utils/ethereumUtils";
 import { BigNumber } from "ethers";
 
-//TODO: rename to DisplayPanel
 const TotalsPanel = ({ web3State }) => {
   const [transactionState, dispatch] = useContext(TransactionContext);
+  const [displayData, setDisplayData] = useState({
+    data: [],
+    totalsLoaded: false,
+  });
 
-  const [displayData, setDisplayData] = useState([]);
+  const styles = {
+    border: {
+      borderColor: "darkblue",
+      border: "double",
+      borderWidth: "thick",
+    },
+  };
 
   useEffect(() => {
     console.log("TotalsPanel useEffect() --- render");
@@ -30,24 +39,26 @@ const TotalsPanel = ({ web3State }) => {
     getTotalNumContractAddresses().then((codes) => {
       const contractAddresses = codes.filter(isContractCode);
       const totalNumContractAddresses = contractAddresses.length;
-      setDisplayData([
-        {
-          label: "Total Ether transferred (ETH)",
-          value: totalEthTransferred,
-        },
-        {
-          label: "Total # transactions",
-          value: totalNumTransactions,
-        },
-        {
-          label: 'Total # contract addresses ("0x")',
-          value: totalNumContractAddresses,
-        },
-      ]);
+      setDisplayData({
+        data: [
+          {
+            label: "Total Ether transferred (ETH)",
+            value: totalEthTransferred,
+          },
+          {
+            label: "Total # transactions",
+            value: totalNumTransactions,
+          },
+          {
+            label: 'Total # contract addresses ("0x")',
+            value: totalNumContractAddresses,
+          },
+        ],
+        totalsLoaded: true,
+      });
     });
   }, [transactionState]);
 
-  //TODO: create functions to calculate these fields?
   useEffect(() => {
     console.log(
       "TotalsPanel useEffect render -- transaction state: ",
@@ -77,16 +88,18 @@ const TotalsPanel = ({ web3State }) => {
   }
 
   return (
-    <div>
-      {displayData.map((data) => {
-        return (
-          <p key={data.label}>
-            <strong>{data.label}: </strong>
-            {data.value}
-          </p>
-        );
-      })}
-    </div>
+    displayData.totalsLoaded && (
+      <div style={styles.border}>
+        {displayData.data.map((data) => {
+          return (
+            <p key={data.label}>
+              <strong>{data.label}: </strong>
+              {data.value}
+            </p>
+          );
+        })}
+      </div>
+    )
   );
 };
 
