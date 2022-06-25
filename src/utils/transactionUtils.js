@@ -6,7 +6,7 @@ import { BigNumber } from "ethers";
  * @param {string} groupByKey the groupBy key
  * @returns a list of transaction totals, grouped by the groupByKey
  */
-function groupTransactions(txArray, groupByKey, x) {
+function groupTransactions(txArray, groupByKey) {
   const totals = [];
   txArray.reduce((results, tx) => {
     if (!results[groupByKey]) {
