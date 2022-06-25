@@ -1,8 +1,8 @@
 {
-  "name": "eth-block-explorer",
+  "name": "eth-cash-flow-tool",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://amishmenon1.github.io/eth-block-explorer",
+  "homepage": "https://amishmenon1.github.io/eth-cash-flow-tool",
   "dependencies": {
     "axios": "^0.18.0",
     "dotenv": "^16.0.0",
