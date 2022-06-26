@@ -1,6 +1,6 @@
 # ETH Cash Flow Block Explorer
 
-This project is a (condensed) Ethereum block explorer project that analyzes transactions wthin a given range of blocks. The application runs on the Rinkeby testnet. Given a range of block numbers, the following data is generated:
+This project is a (condensed) Ethereum block explorer project that analyzes transactions within a given range of blocks. The application integrates with Metamask. Given a range of block numbers, the following data is generated:
 
 1. Total ETH transferred
 2. Total # transactions
