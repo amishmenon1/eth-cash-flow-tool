@@ -58,7 +58,7 @@ function TableIfExists(transactionState, tableState) {
   }
 }
 
-const TransactionsTable = ({ web3State, blockInputs }) => {
+const TransactionsTable = ({ web3State, blockInputs, endStatusCallback }) => {
   console.log("TransactionTable component ---- render");
   const { startBlock, endBlock } = blockInputs;
   const [transactionState, dispatch] = useContext(TransactionContext);
