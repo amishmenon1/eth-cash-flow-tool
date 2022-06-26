@@ -90,7 +90,11 @@ export function TransactionContextProvider({
   return (
     <TransactionContext.Provider value={[transactionState, dispatch]}>
       <TotalsPanel web3State={web3State} />
-      <TransactionsTable web3State={web3State} blockInputs={blockInputs} />
+      <TransactionsTable
+        web3State={web3State}
+        blockInputs={blockInputs}
+        endStatusCallback={endStatusCallback}
+      />
     </TransactionContext.Provider>
   );
 }
