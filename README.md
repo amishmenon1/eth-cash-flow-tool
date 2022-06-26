@@ -47,8 +47,9 @@ The Application Runs on **localhost:3000**
 2. Logging with `react-logger-lib`
 3. Remove `console.log` statements
 
-### Component Structure
+### High Level Component Architecture
 
+![](component-architecture-diagram.png)
 ## Resources
 
 **create-react-app** :
