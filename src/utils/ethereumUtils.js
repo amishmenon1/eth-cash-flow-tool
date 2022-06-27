@@ -1,4 +1,5 @@
 import { ethers } from "ethers";
+import { toast } from "react-toastify";
 
 function toEther(wei) {
   return ethers.utils.formatEther(wei, "Ether");
@@ -15,25 +16,24 @@ function getSigner(provider) {
 async function walletIsConnected() {
   try {
     const { ethereum } = window;
-    let connected;
+    let connected, accounts;
     if (!ethereum) {
-      console.warn("make sure you have metamask");
       connected = false;
     } else {
-      const accounts = await ethereum.request({ method: "eth_accounts" });
+      accounts = await ethereum.request({ method: "eth_accounts" });
       connected = Boolean(accounts.length > 0);
-      return { connected, accounts };
     }
+    return { connected, accounts };
   } catch (error) {
     console.error(error);
   }
 }
-
+// TODO: multiple wallet extensions? open only 1
 async function connectWallet() {
   try {
     const { ethereum } = window;
     if (!ethereum) {
-      console.warn("you need metamask");
+      console.warn("ethereum object not found");
       return;
     }
     const accounts = await ethereum.request({
@@ -60,17 +60,28 @@ function getBlockRange(start, end) {
   return createRange(parseInt(start), parseInt(end));
 }
 
-async function getBlocks(start, end, web3State) {
+function logNoProvider() {
+  console.warn("Metamask not detected.");
+  toast.warn("Metamask not detected.", {
+    position: toast.POSITION.TOP_RIGHT,
+    autoClose: 5000,
+  });
+}
+
+async function getBlocks(start, end, web3State, dispatch) {
   const { provider } = web3State;
+
   if (!end || end === "0") {
     end = await provider.getBlockNumber();
     console.log(`using latest block number: ${end}`);
   }
+
   const promises = [];
   const blockRange = getBlockRange(start, end);
   blockRange.forEach((blockNum) => {
     promises.push(provider.getBlock(blockNum));
   });
+
   return Promise.all(promises);
 }
 
@@ -88,7 +99,7 @@ function getTxHashesFromBlocks(blocks) {
 function getTransactionsFromBlocks(blocks = [], web3State) {
   const { provider } = web3State;
   if (!provider) {
-    console.error("no provider found - check metamask connection.");
+    logNoProvider();
     return;
   }
   const hashes = getTxHashesFromBlocks(blocks);
@@ -137,6 +148,10 @@ function getMappedAddresses(txList, mapFunction) {
  */
 async function getAddressCodes(addresses, web3State) {
   const { provider } = web3State;
+  if (!provider) {
+    logNoProvider();
+    return;
+  }
   const codePromises = [];
   addresses.forEach((address) => {
     codePromises.push(provider.getCode(address));
@@ -157,4 +172,5 @@ export {
   getFromAddresses,
   getToAddresses,
   toEther,
+  logNoProvider,
 };

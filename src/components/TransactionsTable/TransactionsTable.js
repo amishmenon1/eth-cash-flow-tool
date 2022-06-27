@@ -27,7 +27,7 @@ function TableIfExists(transactionState, tableState) {
     case Status.PENDING:
       return loader;
     case Status.REJECTED:
-      throw new Error("promise rejected");
+      throw new Error("Something went wrong. Please check connection.");
     case Status.RESOLVED:
       const { data, headers } = tableState;
       const noRecordsFound = transactionState.data.length === 0;
@@ -91,9 +91,11 @@ const TransactionsTable = ({ web3State, blockInputs, endStatusCallback }) => {
 
       const blocks = await getBlocks(startBlock, endBlock, web3State);
       const transactions = await getTransactionsFromBlocks(blocks, web3State);
+      const finalStatus = !transactions ? Status.REJECTED : Status.RESOLVED;
+
       dispatch({
         data: transactions,
-        type: Status.RESOLVED,
+        type: finalStatus,
       });
     }
 
@@ -109,7 +111,7 @@ const TransactionsTable = ({ web3State, blockInputs, endStatusCallback }) => {
     console.log(
       "TransactionsTable --- useEffect(txData, selectedFilter) --- render"
     );
-    if (!selectedFilter || transactionState.status !== Status.RESOLVED) {
+    if (transactionState.status !== Status.RESOLVED) {
       console.log(
         "TransactionsTable --- useEffect(txData, selectedFilter) -- base case "
       );

@@ -38,12 +38,8 @@ const App = () => {
     }
     loadWeb3State().then((response) => {
       const { connected, accounts } = response;
-      if (!connected) {
-        console.warn("Metamask not detected");
-        toast.warn("Metamask not detected", {
-          position: toast.POSITION.TOP_RIGHT,
-          autoClose: 5000,
-        });
+      setBlockInputsDisabled(!connected);
+      if (!connected || !accounts) {
         return;
       }
       const account = connected ? accounts[0] : null;
@@ -55,6 +51,10 @@ const App = () => {
       });
     });
   }, []);
+
+  useEffect(() => {
+    setBlockInputsDisabled(!web3State.connected);
+  }, [web3State.connected]);
 
   async function handleConnectWallet() {
     const [ethereum, provider, account] = await connectWallet(setWeb3State);
