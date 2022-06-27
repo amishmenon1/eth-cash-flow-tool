@@ -6,6 +6,9 @@ function toEther(wei) {
 }
 
 function getEthereumProvider(ethereum) {
+  if (!ethereum) {
+    logNoWalletFound();
+  }
   return new ethers.providers.Web3Provider(ethereum);
 }
 function getSigner(provider) {
@@ -60,9 +63,9 @@ function getBlockRange(start, end) {
   return createRange(parseInt(start), parseInt(end));
 }
 
-function logNoProvider() {
-  console.warn("Metamask not detected.");
-  toast.warn("Metamask not detected.", {
+function logNoWalletFound() {
+  console.warn("Wallet not detected.");
+  toast.warn("Wallet not detected.", {
     position: toast.POSITION.TOP_RIGHT,
     autoClose: 5000,
   });
@@ -99,7 +102,6 @@ function getTxHashesFromBlocks(blocks) {
 function getTransactionsFromBlocks(blocks = [], web3State) {
   const { provider } = web3State;
   if (!provider) {
-    logNoProvider();
     return;
   }
   const hashes = getTxHashesFromBlocks(blocks);
@@ -149,7 +151,6 @@ function getMappedAddresses(txList, mapFunction) {
 async function getAddressCodes(addresses, web3State) {
   const { provider } = web3State;
   if (!provider) {
-    logNoProvider();
     return;
   }
   const codePromises = [];
@@ -172,5 +173,4 @@ export {
   getFromAddresses,
   getToAddresses,
   toEther,
-  logNoProvider,
 };
