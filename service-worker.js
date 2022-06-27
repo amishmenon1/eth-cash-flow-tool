@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/eth-cash-flow-tool/precache-manifest.5c49adbc623d7af00dd1e17adbcc0f1c.js"
+  "/eth-cash-flow-tool/precache-manifest.58c5c43e1f1d9cb023f829ab267edb81.js"
 );
 
 workbox.clientsClaim();

@@ -1,7 +1,7 @@
 {
   "main.css": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css",
-  "main.js": "/eth-cash-flow-tool/static/js/main.cfe77d78.chunk.js",
-  "main.js.map": "/eth-cash-flow-tool/static/js/main.cfe77d78.chunk.js.map",
+  "main.js": "/eth-cash-flow-tool/static/js/main.636ba162.chunk.js",
+  "main.js.map": "/eth-cash-flow-tool/static/js/main.636ba162.chunk.js.map",
   "static/css/1.8bc535d8.chunk.css": "/eth-cash-flow-tool/static/css/1.8bc535d8.chunk.css",
   "static/js/1.be977e9a.chunk.js": "/eth-cash-flow-tool/static/js/1.be977e9a.chunk.js",
   "static/js/1.be977e9a.chunk.js.map": "/eth-cash-flow-tool/static/js/1.be977e9a.chunk.js.map",
@@ -9,9 +9,9 @@
   "runtime~main.js.map": "/eth-cash-flow-tool/static/js/runtime~main.7a99c149.js.map",
   "static/media/magnifying-glass-icon.png": "/eth-cash-flow-tool/static/media/magnifying-glass-icon.27e342e7.png",
   "static/media/index.mjs": "/eth-cash-flow-tool/static/media/index.4eb253c0.mjs",
-  "static/css/main.dc293fb5.chunk.css.map": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css.map",
   "static/css/1.8bc535d8.chunk.css.map": "/eth-cash-flow-tool/static/css/1.8bc535d8.chunk.css.map",
+  "static/css/main.dc293fb5.chunk.css.map": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css.map",
   "index.html": "/eth-cash-flow-tool/index.html",
-  "precache-manifest.5c49adbc623d7af00dd1e17adbcc0f1c.js": "/eth-cash-flow-tool/precache-manifest.5c49adbc623d7af00dd1e17adbcc0f1c.js",
+  "precache-manifest.58c5c43e1f1d9cb023f829ab267edb81.js": "/eth-cash-flow-tool/precache-manifest.58c5c43e1f1d9cb023f829ab267edb81.js",
   "service-worker.js": "/eth-cash-flow-tool/service-worker.js"
 }
