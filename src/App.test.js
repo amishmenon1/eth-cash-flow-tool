@@ -1,10 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import createRange from "./App";
+import "@testing-library/jest-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
 
-it("renders without crashing", () => {
-  const div = document.createElement("div");
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+beforeEach(() => {
+  //   render(<BlockInput onSubmit={mockSubmit} />);
+  //   startBlockElement = getStartBlockElement();
+  //   endBlockElement = getEndBlockElement();
+  //   fetchButton = getFetchButton();
+});
+
+describe("App component", () => {
+  it("renders correctly", () => {
+    //expect(startBlockElement).toBeInTheDocument();
+  });
 });

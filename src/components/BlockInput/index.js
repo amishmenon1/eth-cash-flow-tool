@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 
-const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
+const BlockInput = ({ onSubmit, fetchDisabled = true }) => {
   console.log("BlockInput component -- render");
   const NUMBERS_PATTERN = /^[0-9\b]+$/;
   const [error, setError] = useState(null);
@@ -50,6 +50,7 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
           </label>
           <input
             id="start-block-input"
+            aria-label="Start Block"
             ref={startRef}
             type="number"
             onChange={onStartBlockChange}
@@ -67,6 +68,7 @@ const BlockInput = ({ onSubmit, fetchDisabled = false }) => {
           </label>
           <input
             id="end-block-input"
+            aria-label="End Block"
             ref={endRef}
             type="number"
             onChange={onEndBlockChange}

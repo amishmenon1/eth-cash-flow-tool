@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import logo from "./images/magnifying-glass-icon.png";
 import "./App.css";
 import Col from "react-bootstrap/Col";
@@ -80,9 +80,6 @@ const App = () => {
     blockInput: {
       borderStyle: "outset",
     },
-    connected: {
-      fontStyle: "italic",
-    },
   };
 
   return (
@@ -96,15 +93,10 @@ const App = () => {
       <Row>
         <Col md={10} />
         <Col md={2}>
-          {!web3State.connected ? (
-            <ConnectWalletButton connectWalletCb={handleConnectWallet} />
-          ) : (
-            <div style={styles.connected}>
-              {" "}
-              Wallet Connected: {web3State.account.slice(0, 3)}...
-              {web3State.account.slice(-3)}
-            </div>
-          )}{" "}
+          <ConnectWalletButton
+            web3State={web3State}
+            connectWalletCb={handleConnectWallet}
+          />
         </Col>
       </Row>
       <Row>
