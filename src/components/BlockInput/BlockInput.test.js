@@ -57,26 +57,4 @@ describe("Fetch Data button", () => {
   it("should be disabled by default", () => {
     expect(fetchButton).toBeDisabled();
   });
-
-  // integration tests
-
-  // it("fetch button disabled when not connected", () => {
-  //   expect(fetchButton).toBeDisabled();
-  // });
-
-  // it("fetch button disabled after clicked", () => {
-  //   const [start, end] = ["1", "10"];
-  //   simulateBlockInput(startBlockElement, start);
-  //   simulateBlockInput(endBlockElement, end);
-  //   fireEvent.click(fetchButton);
-  //   expect(fetchButton).toBeDisabled();
-  // });
-
-  // it("fetch button enabled when connected", () => {
-  //   const [start, end] = ["1", "10"];
-  //   simulateUserInput(startBlockElement, start);
-  //   simulateUserInput(endBlockElement, end);
-  //   fireEvent.click(fetchButton);
-  //   expect(fetchButton).not.toBeDisabled();
-  // });
 });
