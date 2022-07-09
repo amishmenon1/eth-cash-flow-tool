@@ -1,7 +1,7 @@
 {
   "main.css": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css",
-  "main.js": "/eth-cash-flow-tool/static/js/main.636ba162.chunk.js",
-  "main.js.map": "/eth-cash-flow-tool/static/js/main.636ba162.chunk.js.map",
+  "main.js": "/eth-cash-flow-tool/static/js/main.1c08aad8.chunk.js",
+  "main.js.map": "/eth-cash-flow-tool/static/js/main.1c08aad8.chunk.js.map",
   "static/css/1.8bc535d8.chunk.css": "/eth-cash-flow-tool/static/css/1.8bc535d8.chunk.css",
   "static/js/1.be977e9a.chunk.js": "/eth-cash-flow-tool/static/js/1.be977e9a.chunk.js",
   "static/js/1.be977e9a.chunk.js.map": "/eth-cash-flow-tool/static/js/1.be977e9a.chunk.js.map",
@@ -12,6 +12,6 @@
   "static/css/1.8bc535d8.chunk.css.map": "/eth-cash-flow-tool/static/css/1.8bc535d8.chunk.css.map",
   "static/css/main.dc293fb5.chunk.css.map": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css.map",
   "index.html": "/eth-cash-flow-tool/index.html",
-  "precache-manifest.58c5c43e1f1d9cb023f829ab267edb81.js": "/eth-cash-flow-tool/precache-manifest.58c5c43e1f1d9cb023f829ab267edb81.js",
+  "precache-manifest.1d8e14ec96f82b489d8566efe5199a99.js": "/eth-cash-flow-tool/precache-manifest.1d8e14ec96f82b489d8566efe5199a99.js",
   "service-worker.js": "/eth-cash-flow-tool/service-worker.js"
 }

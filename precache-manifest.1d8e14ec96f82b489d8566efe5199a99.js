@@ -1,11 +1,11 @@
 self.__precacheManifest = [
   {
-    "revision": "636ba162cc3684faebf7",
+    "revision": "1c08aad89e2f6ed7145b",
     "url": "/eth-cash-flow-tool/static/css/main.dc293fb5.chunk.css"
   },
   {
-    "revision": "636ba162cc3684faebf7",
-    "url": "/eth-cash-flow-tool/static/js/main.636ba162.chunk.js"
+    "revision": "1c08aad89e2f6ed7145b",
+    "url": "/eth-cash-flow-tool/static/js/main.1c08aad8.chunk.js"
   },
   {
     "revision": "be977e9a21ba8258f87d",
@@ -28,7 +28,7 @@ self.__precacheManifest = [
     "url": "/eth-cash-flow-tool/static/media/index.4eb253c0.mjs"
   },
   {
-    "revision": "671297755492805b90ac3155f1bcec4c",
+    "revision": "7ec461f5bcf7201728413785f79a5151",
     "url": "/eth-cash-flow-tool/index.html"
   }
 ];
