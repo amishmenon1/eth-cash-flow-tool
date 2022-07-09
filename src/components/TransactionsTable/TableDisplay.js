@@ -24,7 +24,7 @@ const TableDisplay = ({ headers, data = [] }) => {
           condensed="true"
           hover
           style={tableStyles}
-          aria-label="table-display"
+          aria-label="Table Display"
         >
           <thead>
             <tr>

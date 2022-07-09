@@ -17,16 +17,9 @@ const getTableDisplay = () =>
 const simulateBlockInput = (element, inputValue) => {
   fireEvent.change(element, { target: { value: inputValue } });
 };
-
-const mockWeb3State = (connected) => {
-  const mockAccount = connected ? "123456" : null;
-  return { connected: connected, account: mockAccount };
-};
-
 export {
   getStartBlockElement,
   getEndBlockElement,
   getFetchButton,
   simulateBlockInput,
-  mockWeb3State,
 };
