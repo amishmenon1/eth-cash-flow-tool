@@ -18,7 +18,14 @@ const TableDisplay = ({ headers, data = [] }) => {
       <strong>No Records Found.</strong>
     ) : (
       <div>
-        <Table striped bordered condensed="true" hover style={tableStyles}>
+        <Table
+          striped
+          bordered
+          condensed="true"
+          hover
+          style={tableStyles}
+          aria-label="table-display"
+        >
           <thead>
             <tr>
               {headers.value.map((header) => (

@@ -11,6 +11,9 @@ const getEndBlockElement = () =>
 const getFetchButton = () =>
   screen.getByRole("button", { name: "Fetch Data!" });
 
+const getTableDisplay = () =>
+  screen.getByRole("table", { name: "table-display" });
+
 const simulateBlockInput = (element, inputValue) => {
   fireEvent.change(element, { target: { value: inputValue } });
 };

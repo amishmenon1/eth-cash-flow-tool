@@ -16,18 +16,10 @@ import { generateTestingUtils } from "eth-testing";
 import App from "./App";
 import BlockInput from "./components/BlockInput";
 
-//integration tests
-const testingUtils = generateTestingUtils({ providerType: "MetaMask" });
-
-function setupMockedAccount() {
-  const mockedAccount = "0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf";
-  // Start with not connected wallet
-  testingUtils.mockNotConnectedWallet();
-  // Mock the connection request of MetaMask
-  testingUtils.mockRequestAccounts([mockedAccount]);
-}
-
 describe("App component", () => {
+  const testingUtils = generateTestingUtils({ providerType: "MetaMask" });
+  const mockedAccount = "0xf61B443A155b07D2b2cAeA2d99715dC84E839EEf";
+
   beforeAll(() => {
     window.ethereum = testingUtils.getProvider();
   });
@@ -47,8 +39,8 @@ describe("App component", () => {
 
   describe("web3 login", () => {
     it("can connect to MetaMask", async () => {
-      setupMockedAccount();
-
+      testingUtils.mockNotConnectedWallet();
+      testingUtils.mockRequestAccounts([mockedAccount]);
       render(<App />);
       const connectButton = await screen.findByRole("button", {
         name: /Connect/i,
@@ -64,26 +56,19 @@ describe("App component", () => {
 
     describe("web3 connected", () => {
       it("fetch button enabled when web3 connected", async () => {
-        setupMockedAccount();
+        testingUtils.mockConnectedWallet([mockedAccount]);
 
         render(<App />);
-        const connectButton = await screen.findByRole("button", {
-          name: /Connect/i,
-        });
 
-        // Click the button
-        fireEvent.click(connectButton);
-        await waitForElementToBeRemoved(connectButton);
-
+        const expectedElement = await screen.findByText(/Wallet Connected/i);
+        expect(expectedElement).toBeInTheDocument();
         const fetchButton = getFetchButton();
-        const startBlockElement = getStartBlockElement();
-        simulateBlockInput(startBlockElement, "12345");
         expect(fetchButton).not.toBeDisabled();
       });
 
       it("fetch button disabled after clicked", () => {
-        const mockSubmit = jest.fn();
-        render(<BlockInput onSubmit={mockSubmit} />);
+        testingUtils.mockConnectedWallet([mockedAccount]);
+        render(<App />);
         const startBlockElement = getStartBlockElement();
         const endBlockElement = getEndBlockElement();
         const fetchButton = getFetchButton();
