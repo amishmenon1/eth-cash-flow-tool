@@ -1,5 +1,7 @@
 # ETH Cash Flow Block Explorer
 
+Deployed site: https://amishmenon1.github.io/eth-cash-flow-tool/
+
 This project is a (condensed) Ethereum block explorer project that analyzes transactions within a given range of blocks. The application integrates with Metamask. Given a range of block numbers, the following data is generated:
 
 1. Total ETH transferred
@@ -50,6 +52,7 @@ The Application Runs on **localhost:3000**
 ### High Level Component Architecture
 
 ![](component-architecture-diagram.png)
+
 ## Resources
 
 **create-react-app** :
